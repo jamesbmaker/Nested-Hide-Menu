@@ -1,0 +1,188 @@
+
+<template>
+<script css="overflow: hidden;" src="https://unpkg.com/vue/dist/vue.js">
+</script>
+<div id="app">
+
+<img @click = "showSwitchTable()" id="hideButton" src="https://i.imgur.com/gaN2qz2.png"/>
+<img id="hideButtonOpen" src="https://i.imgur.com/zqXpRNi.png"/>
+<div @click="hideAll" id="clickOutside"></div>
+
+<table id="switchTable">
+<tr><td class="emojiButton" id="emojiGridId"><div @click="toggleEmojiGrid()"><div class="emoji">😃</div></div></td></tr>
+<tr><td class="emojiButton" id="colorDataId"><div @click="toggleColorData()"><div class="emoji">🎨</div></div></td></tr>
+<tr><td class="emojiButton" id="satelightVeiwId"><div @click="toggleSatelight()"><div class="emoji">🛰️</div></div></td></tr>
+<tr><td class="emojiButton" id="roadDataId"><div @click="toggleRoadData()"><div class="emoji">🌎</div></div></td></tr>
+</table>
+</div>
+</template>
+
+<script>
+new Vue({
+  el: '#app',
+  data: {
+    switchTableVisible: "hidden",
+    hideButtonVisible: "visible",
+    roadData: true,
+    satelightVeiw: false,/*mutually exclusive to road data*/
+    emojiGrid: true, /*can alwase be drawn on top*/
+    colorData: true, /*if shared with satelight or road, draw half opacity on top of other map */
+    onColor: "green",
+    offColor: "grey"
+  },
+  methods: {
+  	showSwitchTable() {
+      this.switchTableVisible = "visible"
+      this.hideButtonVisible = "hidden"
+      document.getElementById("hideButton").style.visibility = this.hideButtonVisible
+      document.getElementById("hideButtonOpen").style.visibility = this.switchTableVisible
+      document.getElementById("switchTable").style.visibility = this.switchTableVisible
+      document.getElementById("clickOutside").style.visibility = this.switchTableVisible
+    },
+    hideAll(){
+      this.switchTableVisible = "hidden"
+      this.hideButtonVisible = "visible"
+      document.getElementById("hideButton").style.visibility = this.hideButtonVisible
+      document.getElementById("hideButtonOpen").style.visibility = this.switchTableVisible
+      document.getElementById("switchTable").style.visibility = this.switchTableVisible
+      document.getElementById("clickOutside").style.visibility = this.switchTableVisible
+    },
+    toggleEmojiGrid(){
+    	if(this.emojiGrid){
+      	this.emojiGrid = false;
+        document.getElementById("emojiGridId").style.background = this.offColor  
+      }else{
+      	this.emojiGrid = true;
+        document.getElementById("emojiGridId").style.background = this.onColor;
+   	  }
+    },
+    toggleColorData(){
+    	if(this.colorData){
+      	this.colorData = false;
+        document.getElementById("colorDataId").style.background = this.offColor  
+      }else{
+      	this.colorData = true;
+        document.getElementById("colorDataId").style.background = this.onColor
+   	  }
+    },
+    toggleSatelight(){
+      if(this.satelightVeiw){
+        this.satelightVeiw = false,
+        document.getElementById("satelightVeiwId").style.background = this.offColor
+        }else{
+          this.satelightVeiw = true,
+          document.getElementById("satelightVeiwId").style.background = this.onColor
+          if(this.roadData){
+          	this.roadData = false;
+            document.getElementById("roadDataId").style.background = this.offColor
+          }
+        }
+    },  
+    toggleRoadData(){
+      if(this.roadData){
+        this.roadData = false,
+        document.getElementById("roadDataId").style.background = this.offColor
+        }else{
+          this.roadData = true,
+          document.getElementById("roadDataId").style.background = this.onColor
+          if(this.satelightVeiw){
+          	this.satelightVeiw = false;
+            document.getElementById("satelightVeiwId").style.background = this.offColor
+          }
+        }
+    }
+  }
+});
+</script>
+
+<style scoped>
+#roadDataId{
+  background: green;
+}
+#satelightVeiwId{
+  background: grey;
+}
+#emojiGridId{
+  background: green;
+}
+#colorDataId{
+  background: green;
+}
+#hideButton{
+  visibility: visible;
+  background-color: white;
+  opacity: 100%;
+  border: 3px solid black;
+  border-radius: 6px;
+  position: absolute;
+  
+  bottom: 95px;
+  right: 50px;
+  
+  width: 32px;
+  height: 32px;
+}
+#hideButtonOpen{
+  visibility: hidden;
+  background-color: white;
+  opacity: 100%;
+  border: 3px solid black;
+  border-radius: 5px;
+  position: absolute;
+  padding: 2px;
+  
+  bottom: 95px;
+  right: 50px;
+  
+  width: 28px;
+  height: 28px;
+}
+#clickOutside{
+  visibility: hidden;
+  position: absolute;
+  background: grey;
+  opacity: 17%;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+#switchTable{
+  visibility: hidden;
+  vertical-align: center;
+  text-align: center;
+  border: 0px;
+  border-radius: 15px;
+  background-color: #E0E0E0;
+  padding: 10px;
+  position: absolute;
+  bottom: 40px;
+  right: 100px;
+  z-index: 2;
+}
+.switchBackOn{
+  background: green;
+  height: 10px;
+  width: 20px;
+  text-align: center;
+  border-radius: 10px 0px 0px 10px;
+  padding-left: 10px;
+  margin-right: 0px;
+ }
+ .emoji{
+   pointer-events: none;
+   user-select: none;
+ }
+ .switchBackOff{
+  padding: 0px;
+  background: grey;
+  height: 10px;
+  width: 20px;
+  text-align: center;
+  border-radius: 0px 10px 10px 0px;
+  margin-left: 0px;
+ }
+ .emojiButton{
+  width: 30px;
+  height: 30px;
+  }
+</style>
